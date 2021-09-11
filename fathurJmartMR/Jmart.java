@@ -4,32 +4,53 @@ package fathurJmartMR;
 /**
  * Write a description of class Jmart here.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Fathurrahman Irwansa
+ * @version 11 Sept 2021
  */
 public class Jmart
 {
-    // instance variables - replace the example below with your own
-    private int x;
-
-    /**
-     * Constructor for objects of class Jmart
-     */
-    public Jmart()
-    {
-        // initialise instance variables
-        x = 0;
+    public static void main (String[] args){
     }
-
-    /**
-     * An example of a method - replace this comment with your own
-     *
-     * @param  y  a sample parameter for a method
-     * @return    the sum of x and y
-     */
-    public int sampleMethod(int y)
-    {
-        // put your code here
-        return x + y;
+    
+    public int getPromo(){
+        return 0;
+    }
+    
+    public String getCustomer(){
+        return "oop";
+    }
+    
+    public float getDiscountPercentage(int before, int after){
+        if(before < after){
+            return 0.0f;
+        }
+        else{
+            return ((before - after)/before)*100;
+        }
+    }
+    
+    public int getDiscountedPrice(int price, float discountPercentage){
+        if(discountPercentage > 100.f){
+            return 0;
+        }
+        else{
+            return price - (int)(discountPercentage * 100);
+        }
+    }
+    
+    public int getOriginalPrice(int discountedPrice, float discountPercentage){
+        return discountedPrice + (int)((100/discountPercentage)*discountedPrice);
+    }
+    
+    public float getCommissionMultiplier(){
+        return 0.05f;
+    }
+    
+    public int getAdjustedPrice(int price){
+        return price + (int)(price*0.05f);
+    }
+    
+    public int getAdminFee(int price){
+        return (int)getCommissionMultiplier() * price;
     }
 }
