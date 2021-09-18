@@ -5,8 +5,8 @@ package fathurJmartMR;
 /**
  * Write a description of class ProductRating here.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author Fathurrahman Irwansa
+ * @version 18 September 2021
  */
 public class ProductRating
 {

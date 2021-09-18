@@ -4,8 +4,8 @@ package fathurJmartMR;
 /**
  * Enumeration class ProducCategory - write a description of the enum class here
  *
- * @author (your name here)
- * @version (version number or date here)
+ * @author Fathurrahman Irwansa
+ * @version 18 September 2021
  */
 public enum ProductCategory
 {
