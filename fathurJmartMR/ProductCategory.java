@@ -10,12 +10,12 @@ package fathurJmartMR;
 public enum ProductCategory
 {
     BOOK,
-    KITHCEN,
+    KITCHEN,
     ELECTRONIC,
     FASHION,
     GAMING,
     GADGET,
-    MOETHERCARE,
+    MOTHERCARE,
     COSMETICS,
     HEALTHCARE,
     FURNITURE,

@@ -8,19 +8,18 @@ package fathurJmartMR;
  */
 public class Jmart
 {
-    public static void main(String[] args){
+    public static void main (String[] args){
     }
-    
+
     public static Product createProduct(){
-        Product product = new Product("Laptop", 4, true, new PriceTag(9000000), ProductCategory.ELECTRONIC);
-        return product;
+        return new Product("Item", 0, false, new PriceTag(100.0), ProductCategory.BOOK);
     }
-    
+
     public static Coupon createCoupun(){
-        return null;
+        return new Coupon("My Coupun", 21312, Coupon.Type.REBATE, 10000, 50000);
     }
-    
+
     public static ShipmentDuration createShipmentDuration(){
-        return null;
+        return new ShipmentDuration(ShipmentDuration.INSTANT, ShipmentDuration.KARGO);
     }
 }
