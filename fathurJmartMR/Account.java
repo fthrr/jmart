@@ -24,4 +24,11 @@ public class Account extends Recognizable implements FileParser
    public boolean read(String content){
        return false;
    }
+   
+   public String toString(){
+        return
+            "Name: "+this.name+"\n"+
+            "Weight: "+this.email+"\n"+
+            "conditionUsed: "+this.password+"\n";
+   }
 }
