@@ -12,16 +12,15 @@ public class Jmart
     }
 
     public static Product createProduct(){
-        //return new Product("Item", 0, false, new PriceTag(100.0), ProductCategory.BOOK);
         return null;
     }
 
     public static Coupon createCoupun(){
-        //return new Coupon("My Coupun", 21312, Coupon.Type.REBATE, 10000, 50000);
         return null;
     }
 
     public static ShipmentDuration createShipmentDuration(){
-        return new ShipmentDuration(ShipmentDuration.INSTANT, ShipmentDuration.KARGO);
+        //return new ShipmentDuration(ShipmentDuration.INSTANT, ShipmentDuration.KARGO);
+        return null;
     }
 }
