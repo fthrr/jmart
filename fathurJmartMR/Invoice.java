@@ -1,11 +1,13 @@
 package fathurJmartMR;
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 /**
  * Write a description of class Invoice here.
  *
  * @author Fathurrahman Irwansa
- * @version 27 September 2021
+ * @version 2 Oktober 2021
  */
 public abstract class Invoice extends Recognizable implements FileParser
 {
@@ -26,7 +28,7 @@ public abstract class Invoice extends Recognizable implements FileParser
         GOOD;
     }
     
-    public String date;
+    public final Date date;
     public int buyerId;
     public int productId;
     public int complaintId;
@@ -37,7 +39,8 @@ public abstract class Invoice extends Recognizable implements FileParser
         super(id);
         this.buyerId = buyerId;
         this.productId = productId;
-        this.date = "27 Sept 2021";
+        this.complaintId = -1;
+        this.date = new Date();
         this.rating = Rating.NONE;
         this.status = Status.WAITING_CONFIRMATION;
     }

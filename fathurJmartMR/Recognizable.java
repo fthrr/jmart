@@ -7,7 +7,7 @@ package fathurJmartMR;
  * @author Fathurrahman Irwansa
  * @version 25 September 2021
  */
-public class Recognizable
+public abstract class Recognizable
 {
     public final int id;
     
@@ -15,25 +15,13 @@ public class Recognizable
         this.id = id;
     }
     
-    public boolean equals(Object object){
-        if(object instanceof Recognizable){
-            Recognizable recognizable = (Recognizable) object;
-            if(recognizable.id == this.id){
-                return true;
-            }
-            else{
-                return false;
-            }
-        }
-        return false;
+    public boolean equals(Object other)
+    {
+        return other instanceof Recognizable && ((Recognizable) other).id == id;
     }
     
-    public boolean equals(Recognizable recognizable){
-        if(recognizable.id == this.id){
-            return true;
-        }
-        else{
-            return false;
-        }
+    public boolean equals(Recognizable other)
+    {
+        return other.id == id;
     }
 }

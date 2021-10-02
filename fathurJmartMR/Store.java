@@ -1,14 +1,17 @@
 package fathurJmartMR;
 
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 /**
  * Write a description of class Store here.
  *
  * @author Fathurrahman Irwansa
- * @version 25 September 2021
+ * @version 2 Oktober 2021
  */
 public class Store extends Recognizable implements FileParser
 {
+    public static final String REGEX_PHONE = "^\\d{9,12}$";
+    public static final String REGEX_NAME = "^[A-Z](?!.*(\\s)\\1).{4,20}$";
     public String name;
     public String address;
     public String phoneNumber;
@@ -37,5 +40,13 @@ public class Store extends Recognizable implements FileParser
             "Name: "+this.name+"\n"+
             "Weight: "+this.address+"\n"+
             "conditionUsed: "+this.phoneNumber+"\n";
-   }
+    }
+    
+    public boolean validate(){
+        Pattern pattern = Pattern.compile(REGEX_NAME);
+        Matcher matcher = pattern.matcher(name);
+        Pattern pattern2 = Pattern.compile(REGEX_PHONE);
+        Matcher matcher2 = pattern2.matcher(phoneNumber);
+        return matcher.find() && matcher2.find();
+    }
 }
