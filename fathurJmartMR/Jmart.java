@@ -12,9 +12,10 @@ import java.util.Date;
 public class Jmart
 {
     public static void main (String[] args){
-        System.out.println(Shipment.Duration.REGULER.getEstimatedArrival(new Date()));
-        Store store = new Store(111, "Fathurrahman Irwansa", "Depok", "08558851636");
-        System.out.println(store.validate());
+        Account account = new Account(333, "Fathurrahman", "fathur.asd@ui.ac.id", "Test123");
+        System.out.println("Validate Account = "+account.validate());
+        Complaint complaint = new Complaint(222, "Mantap");
+        System.out.println(complaint.toString());
     }
 
     public static Product createProduct(){

@@ -24,4 +24,11 @@ public class Complaint extends Recognizable implements FileParser
     public boolean read(String content){
         return false;
     }
+    
+    public String toString(){
+        SimpleDateFormat formattedDate = new SimpleDateFormat("dd/MM/yyyy");
+        String fixedFormat = formattedDate.format(this.date);
+        return
+            "Complaint{date="+fixedFormat+", desc='"+this.desc+"'}";
+    }
 }

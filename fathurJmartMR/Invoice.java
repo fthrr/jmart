@@ -1,7 +1,9 @@
+
 package fathurJmartMR;
 
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 /**
  * Write a description of class Invoice here.
@@ -34,6 +36,14 @@ public abstract class Invoice extends Recognizable implements FileParser
     public int complaintId;
     public Rating rating;
     public Status status;
+    
+    public ArrayList<Record> history = new ArrayList<Record>();
+    
+    public class Record{
+        public Status status;
+        public Date date;
+        public String message;
+    }
     
     protected Invoice(int id, int buyerId, int productId){
         super(id);
