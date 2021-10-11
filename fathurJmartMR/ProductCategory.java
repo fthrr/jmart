@@ -9,7 +9,7 @@ package fathurJmartMR;
  */
 public enum ProductCategory
 {
-    BOOK,
+	BOOK,
     KITCHEN,
     ELECTRONIC,
     FASHION,

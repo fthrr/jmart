@@ -7,7 +7,7 @@ package fathurJmartMR;
  * @author Fathurrahman Irwansa
  * @version 20 September 2021
  */
-public class Coupon extends Recognizable implements FileParser
+public class Coupon extends Recognizable
 {
     public enum Type{
         DISCOUNT,
@@ -21,7 +21,6 @@ public class Coupon extends Recognizable implements FileParser
     private boolean used;
     
     public Coupon(int id, String name, int code, Type type, double cut, double minimum){
-        super(id);
         this.name = name;
         this.code = code;
         this.type = type;
@@ -34,16 +33,16 @@ public class Coupon extends Recognizable implements FileParser
         return used;
     }
     
-    public boolean canApply(PriceTag priceTag){
-        if (priceTag.getAdjustedPrice() >= minimum && used == false){
+    public boolean canApply(Treasury priceTag){
+        /*if (priceTag.getAdjustedPrice()) >= minimum && used == false){
             return true;
-        }
+        }*/
         return false;
     }
     
-    public double apply(PriceTag priceTag){
+    public double apply(Treasury priceTag){
         used = true;
-        double adjustedPrice = priceTag.getAdjustedPrice();
+        /*double adjustedPrice = priceTag.getAdjustedPrice(adjustedPrice, adjustedPrice);
         switch (type)
         {
             case REBATE:
@@ -52,12 +51,11 @@ public class Coupon extends Recognizable implements FileParser
             case DISCOUNT:
                 if (cut >= 100.0) return 0.0;
                 return adjustedPrice - adjustedPrice * (cut / 100);
-        }
+        }*/
         return 0.0;
     }
     
-    @Override
-    public boolean read(String content){
+    /*public boolean read(String content){
         return false;
-    }
+    }*/
 }

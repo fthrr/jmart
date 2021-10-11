@@ -8,38 +8,34 @@ import java.util.regex.Pattern;
  * @author Fathurrahman Irwansa
  * @version 2 Oktober 2021
  */
-public class Store extends Recognizable implements FileParser
+public class Store extends Recognizable
 {
     public static final String REGEX_PHONE = "^\\d{9,12}$";
     public static final String REGEX_NAME = "^[A-Z](?!.*(\\s)\\1).{4,20}$";
     public String name;
+    public double balance;
     public String address;
     public String phoneNumber;
     
-    public Store(int accountId, String name, String address, String phoneNumber){
-        super(accountId);
+    public Store(String name, String address, String phoneNumber, double balance){
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
+        this.balance = balance;
     }
     
-    public Store(Account account, String name, String address, String phoneNumber){
-        super(account.id);
-        this.name = name;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-    }
     
-    @Override
+    /*@Override
     public boolean read(String content){
        return false;
-    }
+    }*/
     
     public String toString(){
         return
             "Name: "+this.name+"\n"+
-            "Weight: "+this.address+"\n"+
-            "conditionUsed: "+this.phoneNumber+"\n";
+            "Address: "+this.address+"\n"+
+            "Phone Number: "+this.phoneNumber+"\n"+
+            "Balance: "+this.balance+"\n";
     }
     
     public boolean validate(){

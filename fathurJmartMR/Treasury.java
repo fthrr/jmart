@@ -6,41 +6,26 @@ package fathurJmartMR;
  * @author Fathurrahman Irwansa
  * @version 18 September 2021
  */
-public class PriceTag
+public class Treasury
 {
     public static final double COMMISSION_MULTIPLIER = 0.05;
     public static final double BOTTOM_PRICE = 20000.0;
     public static final double BOTTOM_FEE   = 1000.0;
 
-    public double discount;
-    public double price;
-
-    public PriceTag(double price)
+    public static double getAdjustedPrice(double price, double discount)
     {
-        this.price = price;
-        this.discount = 0.0;
+        return getDiscountedPrice(0.0, 0.0) + getAdminFee(0.0, 0.0);
     }
 
-    public PriceTag(double price, double discount)
+    public static double getAdminFee(double price, double discount)
     {
-        this.price = price;
-        this.discount = discount;
-    }
-
-    public double getAdjustedPrice()
-    {
-        return getDiscountedPrice() + getAdminFee();
-    }
-
-    public double getAdminFee()
-    {
-        double discountedPrice = getDiscountedPrice();
+        double discountedPrice = getDiscountedPrice(0.0, 0.0);
         if (discountedPrice < BOTTOM_PRICE)
             return BOTTOM_FEE;
         return COMMISSION_MULTIPLIER * discountedPrice;
     }
 
-    private double getDiscountedPrice()
+    private static double getDiscountedPrice(double price, double discount)
     {
         if (discount >= 100.0) return 0.0;
         double cut = price * discount / 100.0;

@@ -9,21 +9,19 @@ import java.text.SimpleDateFormat;
  * @author Fathurrahman Irwansa
  * @version 2 Oktober 2021
  */
-public class Complaint extends Recognizable implements FileParser
+public class Complaint extends Recognizable
 {
     public final Date date;
     public String desc;
     
-    public Complaint(int id, String desc){
-        super(id);
+    public Complaint(String desc){
         this.desc = desc;
         this.date = new Date();
     }
     
-    @Override
-    public boolean read(String content){
+    /*public boolean read(String content){
         return false;
-    }
+    }*/
     
     public String toString(){
         SimpleDateFormat formattedDate = new SimpleDateFormat("dd/MM/yyyy");

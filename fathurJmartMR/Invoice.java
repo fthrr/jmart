@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @author Fathurrahman Irwansa
  * @version 2 Oktober 2021
  */
-public abstract class Invoice extends Recognizable implements FileParser
+public abstract class Invoice extends Recognizable
 {
     public enum Status{
         WAITING_CONFIRMATION,
@@ -44,8 +44,7 @@ public abstract class Invoice extends Recognizable implements FileParser
         public String message;
     }
     
-    protected Invoice(int id, int buyerId, int productId){
-        super(id);
+    protected Invoice(int buyerId, int productId){
         this.buyerId = buyerId;
         this.productId = productId;
         this.complaintId = -1;
@@ -54,10 +53,10 @@ public abstract class Invoice extends Recognizable implements FileParser
         this.status = Status.WAITING_CONFIRMATION;
     }
     
-    @Override
+    /*@Override
     public boolean read(String content){
         return false;
-    }
+    }*/
     
     public abstract double getTotalPay();
 }
