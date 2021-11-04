@@ -14,12 +14,12 @@ public class Treasury
 
     public static double getAdjustedPrice(double price, double discount)
     {
-        return getDiscountedPrice(0.0, 0.0) + getAdminFee(0.0, 0.0);
+        return getDiscountedPrice(price, discount) + getAdminFee(price, discount);
     }
 
     public static double getAdminFee(double price, double discount)
     {
-        double discountedPrice = getDiscountedPrice(0.0, 0.0);
+        double discountedPrice = getDiscountedPrice(price,discount);
         if (discountedPrice < BOTTOM_PRICE)
             return BOTTOM_FEE;
         return COMMISSION_MULTIPLIER * discountedPrice;
