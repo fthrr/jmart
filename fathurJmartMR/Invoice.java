@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @author Fathurrahman Irwansa
  * @version 2 Oktober 2021
  */
-public abstract class Invoice extends Recognizable
+public abstract class Invoice extends Serializable
 {
     public enum Status{
         WAITING_CONFIRMATION,

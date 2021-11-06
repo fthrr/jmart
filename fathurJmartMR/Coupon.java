@@ -7,7 +7,7 @@ package fathurJmartMR;
  * @author Fathurrahman Irwansa
  * @version 20 September 2021
  */
-public class Coupon extends Recognizable
+public class Coupon extends Serializable
 {
     public enum Type{
         DISCOUNT,
@@ -33,26 +33,26 @@ public class Coupon extends Recognizable
         return used;
     }
     
-    public boolean canApply(Treasury priceTag){
-        /*if (priceTag.getAdjustedPrice()) >= minimum && used == false){
-            return true;
-        }*/
-        return false;
+    public boolean canApply(double price, double discount){
+    	 if(Treasury.getAdjustedPrice(price, discount) >= minimum && !used){
+             return true;
+         }else{
+             return false;
+         }
     }
     
-    public double apply(Treasury priceTag){
+    public double apply(double price, double discount){
         used = true;
-        /*double adjustedPrice = priceTag.getAdjustedPrice(adjustedPrice, adjustedPrice);
-        switch (type)
-        {
-            case REBATE:
-                if (adjustedPrice <= cut) return 0.0;
-                return adjustedPrice - cut;
-            case DISCOUNT:
-                if (cut >= 100.0) return 0.0;
-                return adjustedPrice - adjustedPrice * (cut / 100);
-        }*/
-        return 0.0;
+        if(type == Type.DISCOUNT){
+            if(cut >= 100){
+                return (Treasury.getAdjustedPrice(price, discount) - Treasury.getAdjustedPrice(price, discount) * (100 / 100)); //cut max 100%
+            }else if(cut <= 0){
+                return (Treasury.getAdjustedPrice(price, discount) - Treasury.getAdjustedPrice(price, discount) * (0 / 100)); //cut min 0%
+            }else{
+                return (Treasury.getAdjustedPrice(price, discount) - Treasury.getAdjustedPrice(price, discount) * (cut / 100));
+            }
+        }
+        return (Treasury.getAdjustedPrice(price, cut) - cut);
     }
     
     /*public boolean read(String content){

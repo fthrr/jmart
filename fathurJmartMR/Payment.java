@@ -20,22 +20,6 @@ public class Payment extends Invoice
 
 	@Override
 	public double getTotalPay() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
-
-    /*@Override
-    public double getTotalPay(){
-        return 0.0;
-    }
-    
-    @Override
-    public boolean validate(){
-        return false;
-    }
-    
-    @Override
-    public Invoice perform(){
-        return null;
-    }*/
 }

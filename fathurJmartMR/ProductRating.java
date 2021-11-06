@@ -15,8 +15,8 @@ public class ProductRating
 
     public ProductRating()
     {
-        total = 0;
-        count = 0;
+        this.total = 0;
+        this.count = 0;
     }
     public void insert(int rating)
     {

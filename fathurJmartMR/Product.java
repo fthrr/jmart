@@ -7,7 +7,7 @@ package fathurJmartMR;
  * @author Fathurrahman Irwansa
  * @version 18 September 2021
  */
-public class Product extends Recognizable
+public class Product extends Serializable
 {
     public int accountId;
     public ProductCategory category;

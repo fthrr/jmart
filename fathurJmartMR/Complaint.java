@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
  * @author Fathurrahman Irwansa
  * @version 2 Oktober 2021
  */
-public class Complaint extends Recognizable
+public class Complaint extends Serializable
 {
     public final Date date;
     public String desc;
