@@ -5,13 +5,15 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.stream.Collectors;
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 /**
  * Write a description of class Jmart here.
  *
  * @author Fathurrahman Irwansa
- * @version 6 November 2021
+ * @version 8 November 2021
  */
 class Jmart
 {
@@ -19,8 +21,13 @@ class Jmart
     	try
     	{
     		List<Product> list = read("../jmart/json/randomProductList.json");
-    		List<Product> filtered = filterByPrice(list, 13000.0, 15000.0);
-    		filtered.forEach(product -> System.out.println(product.price));
+    		//List<Product> byPrice = filterByPrice(list, 13000.0, 15000.0);
+    		//forEach(product -> System.out.println(product.price));
+    		List<Product> byName = filterByName(list, "gtx", 1, 5);
+    		byName.forEach(product -> System.out.println(product.name));
+    		System.out.println("");
+    		List<Product> byId = filterByAccountId(list, 1, 0, 5);
+    		byId.forEach(product -> System.out.println(product.name));
     	}
     	catch(Throwable t)
     	{
@@ -77,27 +84,27 @@ class Jmart
         return filtered;
     }
     
-    /*System.out.println("acc id:" + new Account(null, null, null, -1).id);
-	System.out.println("acc id:" + new Account(null, null, null, -1).id);
-	System.out.println("acc id:" + new Account(null, null, null, -1).id);
-	
-	System.out.println("pay id:" + new Payment(-1, -1, -1, null).id);
-	System.out.println("pay id:" + new Payment(-1, -1, -1, null).id);
-	System.out.println("pay id:" + new Payment(-1, -1, -1, null).id);
-	*/
-	/*String filepath = "../jmart/json/city.json";
-	Gson gson = new Gson();
-	try
-	{
-		BufferedReader br = new BufferedReader(new FileReader(filepath));
-		Country input = gson.fromJson(br, Country.class);
-		System.out.println("name: " + input.name);
-		System.out.println("population: " + input.population);
-		System.out.println("states: ");
-		input.listOfStates.forEach(state -> System.out.println(state));
-	}
-	catch (IOException e)
-	{
-		e.printStackTrace();
-	}*/
+    public static List<Product> filterByAccountId(List<Product> list,int accountId, int page, int pageSize){
+    	Predicate<Product> pred = filtering -> (filtering.accountId == accountId);
+    	List<Product> paginated = paginate(list, page, pageSize, pred);
+    	
+        return paginated;
+    }
+    
+    public static List<Product> filterByName (List<Product> list, String search, int page, int pageSize){
+    	Predicate<Product> pred = filtering -> (filtering.name.toLowerCase().contains(search.toLowerCase()));
+    	List<Product> paginated = paginate(list, page, pageSize, pred);
+    	
+        return paginated;
+    }
+    
+    private static List<Product> paginate (List<Product> list, int page, int pageSize, Predicate<Product> pred){
+    	if(pageSize < 0 || page < 0) {
+    		return Collections.emptyList();
+        }
+    	else {
+    		return list.stream().filter(filtered -> 
+    		   	   pred.predicate(filtered)).skip(page*pageSize).limit(pageSize).collect(Collectors.toList());
+    	}
+    }
 }
