@@ -14,14 +14,21 @@ public class JsonTable<T> extends Vector<T>{
 	public JsonTable (Class<T> clazz, String filepath) throws IOException {
 		this.filepath = filepath;
 		try {
-			Class<T[]> array = (Class<T[]>) Array.newInstance(clazz,0).getClass();
-		    T[] result = JsonTable.readJson(array,this.filepath);
-		    if(result != null) {
-		    	Collections.addAll(this,result);
-		    }
+			Class<T[]> array = (Class<T[]>) Array.newInstance(clazz, 0).getClass();
+            T[] loaded = readJson(array, filepath);
+            if(loaded != null)
+            {
+                Collections.addAll(this, loaded);
+            }
 		}
 		catch(IOException e) {
-			e.printStackTrace();
+			File file = new File(filepath);
+            File file1 =  file.getParentFile();
+            if(file1 != null)
+            {
+                file1.mkdirs();
+            }
+            file.createNewFile();
 		}
 	}
 	
@@ -36,16 +43,17 @@ public class JsonTable<T> extends Vector<T>{
 		 }
 		 return t;
 	}
-	
+
 	public void writeJson() throws IOException{
 		writeJson(this, this.filepath);
 	}
 	
 	public void writeJson(Object object, String filepath) throws IOException{
 		try{
-			final FileWriter fileWriter = new FileWriter(filepath, true);
-			fileWriter.write(gson.toJson(object));
-			fileWriter.close();
+			FileWriter fwrite = new FileWriter(filepath);
+	        String s = gson.toJson(object);
+	        fwrite.write(s);
+	        fwrite.close();
         }catch (IOException e){
             e.printStackTrace();
         }
