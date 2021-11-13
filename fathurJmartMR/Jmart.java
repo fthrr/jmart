@@ -20,14 +20,22 @@ class Jmart
     public static void main (String[] args){
     	try
     	{
-    		List<Product> list = read("../jmart/json/randomProductList.json");
+    		String filepath = "../jmart/json/account.json";
+    		JsonTable<Account> tableAccount = new JsonTable<>(Account.class, filepath);
+			tableAccount.add(new Account("name", "email", "password"));
+			tableAccount.writeJson();
+
+			tableAccount = new JsonTable<>(Account.class, filepath);
+			tableAccount.forEach(account -> System.out.println(account.toString()));
+			
+    		//List<Product> list = read("../jmart/json/randomProductList.json");
     		//List<Product> byPrice = filterByPrice(list, 13000.0, 15000.0);
     		//forEach(product -> System.out.println(product.price));
-    		List<Product> byName = filterByName(list, "gtx", 1, 5);
-    		byName.forEach(product -> System.out.println(product.name));
-    		System.out.println("");
-    		List<Product> byId = filterByAccountId(list, 1, 0, 5);
-    		byId.forEach(product -> System.out.println(product.name));
+    		//List<Product> byName = filterByName(list, "gtx", 1, 5);
+    		//byName.forEach(product -> System.out.println(product.name));
+    		//System.out.println("");
+    		//List<Product> byId = filterByAccountId(list, 1, 0, 5);
+    		//byId.forEach(product -> System.out.println(product.name));
     	}
     	catch(Throwable t)
     	{
