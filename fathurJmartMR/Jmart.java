@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.stream.Collectors;
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
@@ -15,35 +16,81 @@ import com.google.gson.stream.JsonReader;
  * @author Fathurrahman Irwansa
  * @version 8 November 2021
  */
-class Jmart
-{
+public class Jmart {
+	
+	public static long DELIVERED_LIMIT_MS = 50;
+	public static long ON_DELIVERY_LIMIT_MS = 100;
+	public static long ON_PROGRESS_LIMIT_MS = 150;
+	public static long WAITING_CONF_LIMIT_MS = 200;
+	
     public static void main (String[] args){
-    	try
-    	{
-    		String filepath = "../jmart/json/account.json";
-    		JsonTable<Account> tableAccount = new JsonTable<>(Account.class, filepath);
-			tableAccount.add(new Account("name", "email", "password"));
-			tableAccount.writeJson();
-
-			tableAccount = new JsonTable<>(Account.class, filepath);
-			tableAccount.forEach(account -> System.out.println(account.toString()));
-			
-    		//List<Product> list = read("../jmart/json/randomProductList.json");
-    		//List<Product> byPrice = filterByPrice(list, 13000.0, 15000.0);
-    		//forEach(product -> System.out.println(product.price));
-    		//List<Product> byName = filterByName(list, "gtx", 1, 5);
-    		//byName.forEach(product -> System.out.println(product.name));
-    		//System.out.println("");
-    		//List<Product> byId = filterByAccountId(list, 1, 0, 5);
-    		//byId.forEach(product -> System.out.println(product.name));
+    	try {
+    		JsonTable<Payment> table = new JsonTable<>(Payment.class, "../jmart/json/randomPaymentList.json");
+    		ObjectPoolThread<Payment> paymentPool = new ObjectPoolThread<Payment>("Thread-PP", Jmart::paymentTimekeeper);
+    		paymentPool.start();
+    		table.forEach(payment -> paymentPool.add(payment));
+    		while(paymentPool.size() != 0);
+    		paymentPool.exit();
+    		while(paymentPool.isAlive());
+    		System.out.print("Thread exited successfully");
+    		
+    		Gson gson = new Gson();
+    		table.forEach(payment -> {
+    			String history = gson.toJson(payment.history);
+    			System.out.println(history);
+    		});
     	}
-    	catch(Throwable t)
-    	{
+    	catch(Throwable t){
     		t.printStackTrace();
     	}
     }
     
-    public static List<Product> read(String filepath){
+    public static boolean paymentTimekeeper(Payment payment) {
+    	 Payment.Record record = payment.history.get(payment.history.size() - 1);
+         long elapsed = Math.abs(record.date.getTime() - (new Date()).getTime());
+
+         if(record.status == Invoice.Status.WAITING_CONFIRMATION && elapsed > WAITING_CONF_LIMIT_MS) {
+             payment.history.add(new Payment.Record(Invoice.Status.FAILED, "Waiting"));
+             return true;
+         } else if(record.status == Invoice.Status.ON_PROGRESS && elapsed > ON_PROGRESS_LIMIT_MS) {
+             payment.history.add(new Payment.Record(Invoice.Status.FAILED, "Progress"));
+             return true;
+         } else if(record.status == Invoice.Status.ON_DELIVERY && elapsed > ON_DELIVERY_LIMIT_MS) {
+             payment.history.add(new Payment.Record(Invoice.Status.DELIVERED, "Delivery"));
+             return false;
+         } else if(record.status == Invoice.Status.DELIVERED && elapsed > DELIVERED_LIMIT_MS) {
+             payment.history.add(new Payment.Record(Invoice.Status.FINISHED, "Finish"));
+             return true;
+         }
+         return false;
+    }
+}
+    
+	/*try
+	{
+		String filepath = "../jmart/json/account.json";
+		JsonTable<Account> tableAccount = new JsonTable<>(Account.class, filepath);
+		tableAccount.add(new Account("name", "email", "password"));
+		tableAccount.writeJson();
+
+		tableAccount = new JsonTable<>(Account.class, filepath);
+		tableAccount.forEach(account -> System.out.println(account.toString()));
+		
+		//List<Product> list = read("../jmart/json/randomProductList.json");
+		//List<Product> byPrice = filterByPrice(list, 13000.0, 15000.0);
+		//forEach(product -> System.out.println(product.price));
+		//List<Product> byName = filterByName(list, "gtx", 1, 5);
+		//byName.forEach(product -> System.out.println(product.name));
+		//System.out.println("");
+		//List<Product> byId = filterByAccountId(list, 1, 0, 5);
+		//byId.forEach(product -> System.out.println(product.name));
+	}
+	catch(Throwable t)
+	{
+		t.printStackTrace();
+	}*/
+	
+    /*public static List<Product> read(String filepath){
     	List<Product> products = new ArrayList<>();
         try{
             Gson gson = new Gson();
@@ -114,5 +161,4 @@ class Jmart
     		return list.stream().filter(filtered -> 
     		   	   pred.predicate(filtered)).skip(page*pageSize).limit(pageSize).collect(Collectors.toList());
     	}
-    }
-}
+    }*/

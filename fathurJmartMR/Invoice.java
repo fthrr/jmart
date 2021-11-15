@@ -13,13 +13,14 @@ import java.util.ArrayList;
 public abstract class Invoice extends Serializable
 {
     public enum Status{
-        WAITING_CONFIRMATION,
         CANCELLED,
-        ON_PROGGRESS,
-        ON_DELIVERY,
         COMPLAINT,
+        DELIVERED,
+        FAILED,
         FINISHED,
-        FAILED;
+        ON_DELIVERY,
+        ON_PROGRESS,
+        WAITING_CONFIRMATION;
     }
     
     public enum Rating{
@@ -34,7 +35,7 @@ public abstract class Invoice extends Serializable
     public int productId;
     public int complaintId;
     public Rating rating;
-    public Status status;
+    //public Status status;
     
     public ArrayList<Record> history = new ArrayList<Record>();
     
@@ -48,9 +49,9 @@ public abstract class Invoice extends Serializable
         this.buyerId = buyerId;
         this.productId = productId;
         this.complaintId = -1;
-        this.date = new Date();
+        this.date = java.util.Calendar.getInstance().getTime();
         this.rating = Rating.NONE;
-        this.status = Status.WAITING_CONFIRMATION;
+        //this.status = Status.WAITING_CONFIRMATION;
     }
     
     /*@Override
@@ -58,5 +59,5 @@ public abstract class Invoice extends Serializable
         return false;
     }*/
     
-    public abstract double getTotalPay();
+    public abstract double getTotalPay(Product product);
 }

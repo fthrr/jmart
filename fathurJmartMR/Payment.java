@@ -1,5 +1,8 @@
 package fathurJmartMR;
 
+import java.util.ArrayList;
+import java.util.Date;
+import fathurJmartMR.Invoice.Record;
 
 /**
  * Write a description of class Payment here.
@@ -9,7 +12,8 @@ package fathurJmartMR;
  */
 public class Payment extends Invoice
 {
-    public int productCount;
+    public ArrayList<Record> history = new ArrayList<Record>();
+	public int productCount;
     public Shipment shipment;
 
     public Payment(int buyerId, int productId, int productCount, Shipment shipment){
@@ -17,9 +21,21 @@ public class Payment extends Invoice
     	this.productCount = productCount;
         this.shipment = shipment;
     }
+    
+    public static class Record{
+    	public final Date date;
+    	public String message;
+    	public Status status;
+    
+    	public Record(Status status, String message) {
+    		this.status = status;
+    		this.message = message;
+    		this.date = java.util.Calendar.getInstance().getTime();
+    	}
+    }
 
 	@Override
-	public double getTotalPay() {
-		return 0;
-	}
+    public double getTotalPay(Product product){
+        return (productCount * Treasury.getAdjustedPrice(product.price, product.discount));
+    }
 }

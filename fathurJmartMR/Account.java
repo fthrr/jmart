@@ -42,10 +42,12 @@ public class Account extends Serializable
        }
        return false;
    }
-   /*public String toString(){
+   
+   public String toString(){
         return
             "Name: "+this.name+"\n"+
-            "Weight: "+this.email+"\n"+
-            "conditionUsed: "+this.password+"\n";
-   }*/
+            "Email: "+this.email+"\n"+
+            "Password: "+this.password+"\n";
+            //"Balance"+this.balance;
+   }
 }
