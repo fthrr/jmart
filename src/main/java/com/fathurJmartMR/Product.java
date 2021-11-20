@@ -1,5 +1,6 @@
 package com.fathurJmartMR;
 
+import com.fathurJmartMR.dbjson.Serializable;
 
 /**
  * Write a description of class Product here.

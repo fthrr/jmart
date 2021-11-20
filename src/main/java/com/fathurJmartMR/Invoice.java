@@ -1,6 +1,9 @@
 package com.fathurJmartMR;
 
 import java.util.Date;
+
+import com.fathurJmartMR.dbjson.Serializable;
+
 import java.util.ArrayList;
 
 /**

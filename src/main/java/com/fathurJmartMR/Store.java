@@ -2,6 +2,8 @@ package com.fathurJmartMR;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.fathurJmartMR.dbjson.Serializable;
 /**
  * Write a description of class Store here.
  *
