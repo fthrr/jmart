@@ -24,7 +24,7 @@ public class PaymentController implements BasicGetController<Payment>
 	
 	public static @JsonAutowired(filepath = "../jmart/json/Payment.json", value = Payment.class) JsonTable<Payment> paymentTable;
 	
-	public static ObjectPoolThread<Payment> poolThread;
+	public static ObjectPoolThread<Payment> poolThread = new ObjectPoolThread<Payment>(PaymentController::timekeeper);
 	
 	@PostMapping("/create")
 	boolean create
