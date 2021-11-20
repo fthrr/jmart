@@ -95,8 +95,8 @@ public class AccountController implements BasicGetController<Account>
 	}
 	
 	
-	@GetMapping
-	String index() { return "account page"; }
+	//@GetMapping
+	//String index() { return "account page"; }
 	
 	
 	//@GetMapping("/{id}")
