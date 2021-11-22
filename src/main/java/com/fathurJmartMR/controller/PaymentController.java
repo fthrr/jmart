@@ -22,7 +22,7 @@ public class PaymentController implements BasicGetController<Payment>
 	public static final long ON_PROGRESS_LIMIT_MS = 3000;
 	public static final long WAITING_CONF_LIMIT_MS = 3000;
 	
-	public static @JsonAutowired(filepath = "../jmart/json/Payment.json", value = Payment.class) JsonTable<Payment> paymentTable;
+	public static @JsonAutowired(filepath = "../jmart/json/PaymentList.json", value = Payment.class) JsonTable<Payment> paymentTable;
 	
 	public static ObjectPoolThread<Payment> poolThread = new ObjectPoolThread<Payment>(PaymentController::timekeeper);
 	

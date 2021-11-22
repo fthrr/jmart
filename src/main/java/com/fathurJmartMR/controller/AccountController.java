@@ -1,12 +1,18 @@
 package com.fathurJmartMR.controller;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.web.bind.annotation.*;
 import com.fathurJmartMR.Account;
+import com.fathurJmartMR.Algorithm;
 import com.fathurJmartMR.Store;
 import com.fathurJmartMR.dbjson.JsonAutowired;
 import com.fathurJmartMR.dbjson.JsonTable;
+
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 @RestController
 @RequestMapping("/account")
@@ -31,11 +37,19 @@ public class AccountController implements BasicGetController<Account>
 		@RequestParam String password
 	)
 	{
-		for(Account account : accountTable){
-			if(account.email.equals(email) && account.password.equals(password)){
-				return account;
-				}
-			}
+		try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] messageDigest = md.digest(password.getBytes());
+            BigInteger no = new BigInteger(1, messageDigest);
+            String hashPassword = no.toString(16);
+            while (hashPassword.length() < 32) {
+                hashPassword = "0" + hashPassword;
+            }
+            String hashed = hashPassword;
+            return Algorithm.<Account>find(accountTable, obj -> obj.email.equals(email) && obj.password.equals(hashed));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
 		return null;
 	}
 	
@@ -47,15 +61,34 @@ public class AccountController implements BasicGetController<Account>
 		@RequestParam String password
 	)
 	{
-		if((REGEX_PATTERN_EMAIL.matcher(email).find()) && (REGEX_PATTERN_PASSWORD.matcher(password).find()) && !name.isBlank()){
-			for(Account account : accountTable){
-				if(account.email.equals(email)){
-					return null;
-                }
-            }
-            return new Account(name, email, password, 0);
-        }
-        return null;
+		 if(name.isBlank()) return null;
+		 
+		 Matcher matcher1 = REGEX_PATTERN_EMAIL.matcher(email);
+		 if(!matcher1.find()) return null;
+		 
+		 Matcher matcher2 = REGEX_PATTERN_PASSWORD.matcher(password);
+		 if(!matcher2.find()) return null;
+		 
+		 if(Algorithm.<Account>find(accountTable, obj -> obj.email.equals(email)) != null) return null;
+		 
+		 MessageDigest md = null;
+		 try {
+			 md = MessageDigest.getInstance("MD5");
+		 } catch (NoSuchAlgorithmException e) {
+			 e.printStackTrace();
+		 }
+		 
+		 byte[] digest = md.digest(password.getBytes());
+		 BigInteger no = new BigInteger(1, digest);
+		 String hashed = no.toString(16);
+		 while (hashed.length() < 32) {
+			 hashed = "0" + hashed;
+		 }
+		 
+		 Account account = new Account(name, email, hashed, 0);
+		 accountTable.add(account);
+		 
+		 return account;
 	}
 	
 	@PostMapping("/{id}/registerStore")
@@ -94,8 +127,8 @@ public class AccountController implements BasicGetController<Account>
 	}
 	
 	
-	//@GetMapping
-	//String index() { return "account page"; }
+	@GetMapping
+	String index() { return "account page"; }
 	
 	
 	//@GetMapping("/{id}")
