@@ -25,64 +25,59 @@ import com.google.gson.stream.JsonReader;
 
 @SpringBootApplication
 public class Jmart {
-	
-	/*public static long DELIVERED_LIMIT_MS = 3000;
-	public static long ON_DELIVERY_LIMIT_MS = 3000;
-	public static long ON_PROGRESS_LIMIT_MS = 3000;
-	public static long WAITING_CONF_LIMIT_MS = 3000;*/
-	
     public static void main (String[] args){
     	JsonDBEngine.Run(Jmart.class);
     	SpringApplication.run(Jmart.class, args);
     	Runtime.getRuntime().addShutdownHook(new Thread(() -> JsonDBEngine.join()));
-    	/*SpringApplication.run(Jmart.class, args);
-    	try {
-    		JsonTable<Payment> table = new JsonTable<>(Payment.class, "../jmart/json/randomPaymentList.json");
-    		ObjectPoolThread<Payment> paymentPool = new ObjectPoolThread<Payment>("Thread-PP", Jmart::paymentTimekeeper);
-    		paymentPool.start();
-    		table.forEach(payment -> paymentPool.add(payment));
-    		while(paymentPool.size() != 0);
-    		paymentPool.exit();
-    		while(paymentPool.isAlive());
-    		System.out.print("Thread exited successfully");
-    		
-    		Gson gson = new Gson();
-    		table.forEach(payment -> {
-    			String history = gson.toJson(payment.history);
-    			System.out.println(history);
-    		});
-    	}
-    	catch(Throwable t){
-    		t.printStackTrace();
-    	}*/
-    }
-    
-    /*public static boolean paymentTimekeeper (Payment payment)
-	{
-		Payment.Record paymentHistory = payment.history.get(payment.history.size() - 1);
-        long elapsed = Math.abs(paymentHistory.date.getTime() - (new Date()).getTime());
 
-        if(paymentHistory.status == Invoice.Status.WAITING_CONFIRMATION && elapsed > WAITING_CONF_LIMIT_MS) {
-            payment.history.add(new Payment.Record(Invoice.Status.FAILED, "Waiting"));
-            return true;
-        }
-        else if(paymentHistory.status == Invoice.Status.ON_PROGRESS && elapsed > ON_PROGRESS_LIMIT_MS) {
-            payment.history.add(new Payment.Record(Invoice.Status.FAILED, "Progress"));
-            return true;
-        } 
-        else if(paymentHistory.status == Invoice.Status.ON_DELIVERY && elapsed > ON_DELIVERY_LIMIT_MS) {
-            payment.history.add(new Payment.Record(Invoice.Status.DELIVERED, "Delivery"));
-            return false;
-        }
-        else if(paymentHistory.status == Invoice.Status.DELIVERED && elapsed > DELIVERED_LIMIT_MS) {
-            payment.history.add(new Payment.Record(Invoice.Status.FINISHED, "Finish"));
-            return true;
-        }
-        else {
-        	return false;
-        }
-	}*/
+    }
 }
+
+/*SpringApplication.run(Jmart.class, args);
+try {
+	JsonTable<Payment> table = new JsonTable<>(Payment.class, "../jmart/json/randomPaymentList.json");
+	ObjectPoolThread<Payment> paymentPool = new ObjectPoolThread<Payment>("Thread-PP", Jmart::paymentTimekeeper);
+	paymentPool.start();
+	table.forEach(payment -> paymentPool.add(payment));
+	while(paymentPool.size() != 0);
+	paymentPool.exit();
+	while(paymentPool.isAlive());
+	System.out.print("Thread exited successfully");
+	
+	Gson gson = new Gson();
+	table.forEach(payment -> {
+		String history = gson.toJson(payment.history);
+		System.out.println(history);
+	});
+}
+catch(Throwable t){
+	t.printStackTrace();
+}*/
+/*public static boolean paymentTimekeeper (Payment payment)
+{
+	Payment.Record paymentHistory = payment.history.get(payment.history.size() - 1);
+    long elapsed = Math.abs(paymentHistory.date.getTime() - (new Date()).getTime());
+
+    if(paymentHistory.status == Invoice.Status.WAITING_CONFIRMATION && elapsed > WAITING_CONF_LIMIT_MS) {
+        payment.history.add(new Payment.Record(Invoice.Status.FAILED, "Waiting"));
+        return true;
+    }
+    else if(paymentHistory.status == Invoice.Status.ON_PROGRESS && elapsed > ON_PROGRESS_LIMIT_MS) {
+        payment.history.add(new Payment.Record(Invoice.Status.FAILED, "Progress"));
+        return true;
+    } 
+    else if(paymentHistory.status == Invoice.Status.ON_DELIVERY && elapsed > ON_DELIVERY_LIMIT_MS) {
+        payment.history.add(new Payment.Record(Invoice.Status.DELIVERED, "Delivery"));
+        return false;
+    }
+    else if(paymentHistory.status == Invoice.Status.DELIVERED && elapsed > DELIVERED_LIMIT_MS) {
+        payment.history.add(new Payment.Record(Invoice.Status.FINISHED, "Finish"));
+        return true;
+    }
+    else {
+    	return false;
+    }
+}*/
     
 	/*try
 	{

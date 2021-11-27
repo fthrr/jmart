@@ -12,7 +12,7 @@ import com.fathurJmartMR.dbjson.Serializable;
  */
 public class Store extends Serializable
 {
-    public static final String REGEX_PHONE = "^\\d{9,12}$";
+    public static final String REGEX_PHONE = "^[0-9]{9,12}";
     public static final String REGEX_NAME = "^[A-Z](?!.*(\\s)\\1).{4,20}$";
     public String name;
     public double balance;

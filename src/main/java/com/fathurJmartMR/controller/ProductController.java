@@ -76,24 +76,7 @@ public class ProductController implements BasicGetController<Product> {
 			@RequestParam(required = false) ProductCategory category
 	)
 	{
-		Predicate<Product> predicate = obj -> {
-            if(accountId != 0 && obj.accountId == accountId){
-                return true;
-            }
-            if(!search.isBlank() && obj.name.equals(search)){
-                return true;
-            }
-            if(minPrice != 0 && obj.price > minPrice){
-                return true;
-            }
-            if(maxPrice != 0 && obj.price < maxPrice){
-                return true;
-            }
-            if(category != null && obj.category == category){
-                return true;
-            }
-            return false;
-        };
-	    return Algorithm.<Product>paginate(getJsonTable(),page,pageSize, predicate);
+		Predicate<Product> pred = p -> ((p.accountId == accountId) && (p.name.toLowerCase().contains(search.toLowerCase())) && (p.price >= minPrice && p.price <= maxPrice) && (p.category == category));
+        return Algorithm.<Product>paginate(getJsonTable(),page,pageSize, pred);
 	}
 }

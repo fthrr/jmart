@@ -23,15 +23,21 @@ public class JsonTable<T> extends Vector<T>
     @SuppressWarnings("unchecked")
     public JsonTable(Class<T> clazz, String filepath) throws IOException
     {
-        this.filepath = filepath;
-        try
-        {
-        	Class<T[]> arrayType = (Class<T[]>) Array.newInstance(clazz, 0).getClass();
+    	this.filepath = filepath;
+        try{
+            Class<T[]> arrayType = (Class<T[]>) Array.newInstance(clazz, 0).getClass();
             T[] loaded = readJson(arrayType, filepath);
-            if (loaded != null)
+            if (loaded != null) {
                 Collections.addAll(this, loaded);
+            }
+        }catch (FileNotFoundException e){
+            File f = new File(filepath);
+            File fParent = f.getParentFile();
+            if(fParent != null){
+                fParent.mkdirs();
+            }
+            f.createNewFile();
         }
-        catch (FileNotFoundException e) {}
     }
     
     public void writeJson() throws IOException
