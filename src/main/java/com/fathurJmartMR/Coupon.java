@@ -3,25 +3,42 @@ package com.fathurJmartMR;
 import com.fathurJmartMR.dbjson.Serializable;
 
 /**
- * Write a description of class Coupon here.
+ * Class Coupon untuk mendefinisikan setiap fungsi coupon pada jmart
  *
  * @author Fathurrahman Irwansa
- * @version 20 September 2021
+ * @version 5 Desember 2021
  */
 public class Coupon extends Serializable
 {
+    /**
+     * Enum class from type coupon
+     *
+     */
     public enum Type{
-        DISCOUNT,
-        REBATE;
+        DISCOUNT, REBATE
     }
-    public final String name;
+    
+    /**
+     * Instace variable untuk class coupon
+     */
     public final int code;
     public final double cut;
-    public final Type type;
     public final double minimum;
+    public final String name;
+    public final Type type;
     private boolean used;
     
-    public Coupon(int id, String name, int code, Type type, double cut, double minimum){
+
+    /**
+     * Method construtor untuk class coupon
+     * @param name	coupon name
+     * @param code	coupon code
+     * @param type	coupon type
+     * @param cut	coupon cut
+     * @param minimum	coupon minimum price
+     */
+    public Coupon(String name, int code, Type type, double cut, double minimum)
+    {
         this.name = name;
         this.code = code;
         this.type = type;
@@ -30,19 +47,14 @@ public class Coupon extends Serializable
         this.used = false;
     }
     
-    public boolean isUsed(){
-        return used;
-    }
-    
-    public boolean canApply(double price, double discount){
-    	 if(Treasury.getAdjustedPrice(price, discount) >= minimum && !used){
-             return true;
-         }else{
-             return false;
-         }
-    }
-    
-    public double apply(double price, double discount){
+    /**
+     * Method apply untuk memakai coupon
+     * @param price		product price
+     * @param discount	discount percentage
+     * @return adjustedPrice
+     */
+    public double apply(double price, double discount)
+    {
         used = true;
         if(type == Type.DISCOUNT){
             if(cut >= 100){
@@ -56,7 +68,28 @@ public class Coupon extends Serializable
         return (Treasury.getAdjustedPrice(price, cut) - cut);
     }
     
-    /*public boolean read(String content){
-        return false;
-    }*/
+    /**
+     * Method untuk memeriksa apakah coupon dapat digunaakn
+     * @param price		Product price
+     * @param discount	discount price
+     * @return condition
+     */
+    public boolean canApply(double price, double discount)
+    {
+        if(Treasury.getAdjustedPrice(price, discount) >= minimum && !used){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    /**
+     * Method untuk mengubah kondisi coupon
+     * @return used
+     */
+    public boolean isUsed()
+    {
+        return used;
+    }
+
 }

@@ -7,29 +7,36 @@ import com.fathurJmartMR.dbjson.Serializable;
 import java.text.SimpleDateFormat;
 
 /**
- * Write a description of class Complaint here.
+ * Class complaint untuk menampung complaint pada store jmart
  *
  * @author Fathurrahman Irwansa
- * @version 2 Oktober 2021
+ * @version 5 Desember 2021
  */
 public class Complaint extends Serializable
-{
-    public final Date date;
+{  
+	/**
+	 * Instance variable untuk class Complaint
+	 */
+	public Date date;
     public String desc;
     
+    /**
+     * Constructor untuk class complaint
+     * @param desc	complaint description
+     */
     public Complaint(String desc){
         this.desc = desc;
         this.date = new Date();
+        System.out.println(date);
     }
     
-    /*public boolean read(String content){
-        return false;
-    }*/
-    
+    /**
+     *Method untuk mengkonversi variable dalam kelas complaint menjadi string
+     */
+    @Override
     public String toString(){
-        SimpleDateFormat formattedDate = new SimpleDateFormat("dd/MM/yyyy");
-        String fixedFormat = formattedDate.format(this.date);
-        return
-            "Complaint{date="+fixedFormat+", desc='"+this.desc+"'}";
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        return ("Complaint{date=" + df.format(date) + ", desc='" + desc + "'}");
     }
+       
 }

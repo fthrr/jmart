@@ -15,6 +15,7 @@ import com.google.gson.stream.JsonReader;
  * @param <T> Type of component elements (may translated as JSON Object)
  */
 
+@SuppressWarnings("serial")
 public class JsonTable<T> extends Vector<T>
 {
 	private static final Gson gson = new Gson();
@@ -31,6 +32,7 @@ public class JsonTable<T> extends Vector<T>
                 Collections.addAll(this, loaded);
             }
         }catch (FileNotFoundException e){
+            e.printStackTrace();
             File f = new File(filepath);
             File fParent = f.getParentFile();
             if(fParent != null){
@@ -47,22 +49,14 @@ public class JsonTable<T> extends Vector<T>
 
     public static void writeJson(Object object, String filepath) throws IOException
     {
-        File file = new File(filepath);
-        if (!file.exists())
-        {
-            File parent = file.getParentFile();
-            if (parent != null)
-                parent.mkdirs();
-            file.createNewFile();
-        }
-        final FileWriter writer = new FileWriter(filepath);
+    	FileWriter writer = new FileWriter(filepath);
         writer.write(gson.toJson(object));
         writer.close();
     }
 
     public static <T> T readJson(Class<T> clazz, String filepath) throws FileNotFoundException
     {
-        final JsonReader reader = new JsonReader(new FileReader(filepath));
-        return gson.fromJson(reader, clazz);
+    	JsonReader fReader = new JsonReader(new FileReader(filepath));
+        return gson.fromJson(fReader, clazz);
     }
 }

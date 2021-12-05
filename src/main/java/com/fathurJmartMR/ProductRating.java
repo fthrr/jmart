@@ -2,35 +2,65 @@ package com.fathurJmartMR;
 
 
 /**
- * Write a description of class ProductRating here.
+ * Product Rating Class untuk menghandle rincian product
  *
  * @author Fathurrahman Irwansa
- * @version 18 September 2021
+ * @version 5 Desmber 2021
  */
 public class ProductRating
 {
+    /**
+     * Instance variable untuk product class rating
+     */
     private long total;
     private long count;
-
+    
+    /**
+     * Constructor untuk objek dari class ProductRating
+     */
     public ProductRating()
     {
         this.total = 0;
         this.count = 0;
     }
+    
+    /**
+     * Method untuk menambahkan rating
+     * @param rating product rating
+     */
     public void insert(int rating)
     {
         total += rating;
-        ++count;
+        count++;
     }
+    
+    
+    /**
+     * Method untuk menghitung rating rata-rata product
+     * @return rating
+     */
     public double getAverage()
     {
-        if (count == 0) return 0.0;
-        return (double) total / count;
+        if(count == 0){
+            return 0.0;
+        }else{
+            return total/(double)count;
+        }
     }
+    
+    /**
+     * Accessor method untuk mendapatkan nilai count
+     * @return count
+     */
     public long getCount()
     {
         return count;
     }
+    
+    /**
+     * Accessor method untuk mendapatkan nilai total
+     * @return total
+     */
     public long getTotal()
     {
         return total;

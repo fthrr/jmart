@@ -1,136 +1,152 @@
 package com.fathurJmartMR.controller;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.springframework.web.bind.annotation.*;
 import com.fathurJmartMR.Account;
 import com.fathurJmartMR.Algorithm;
 import com.fathurJmartMR.Store;
 import com.fathurJmartMR.dbjson.JsonAutowired;
 import com.fathurJmartMR.dbjson.JsonTable;
-
-import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Class AccountController untuk menghandle seluruh urusan terkait Account
+ * @author Fathurrahman Irwansa
+ * @version 5 Desember 2021
+ */
 @RestController
 @RequestMapping("/account")
 public class AccountController implements BasicGetController<Account> 
 {
-	public static final String REGEX_EMAIL = "^[a-zA-Z0-9&_*~]+(?:\\.[a-zA-Z0-9&_*~]+)*@[A-Za-z0-9]{1}[a-zA-Z0-9]+(?:\\.[a-zA-Z0-9-]+)*$";
-	public static final String REGEX_PASSWORD = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$";
+
+	/**
+	 * Instance variable untuk AccountController
+	 */
+	public static @JsonAutowired(value=Account.class, filepath="C:\\OOP\\jmart\\json\\Account.json") JsonTable<Account> accountTable;
+	public static final String REGEX_EMAIL = "^\\w+([\\.]?[&\\*~\\w+])*@\\w+([\\.-]?)*(\\.\\w{2,3})+$";
+    public static final String REGEX_PASSWORD = "^(?=.*[0-9])(?=.*[a-z])(?=\\S+$)(?=.*[A-Z]).{8,}$";
 	public static final Pattern REGEX_PATTERN_EMAIL = Pattern.compile(REGEX_EMAIL);
 	public static final Pattern REGEX_PATTERN_PASSWORD = Pattern.compile(REGEX_PASSWORD);
-	
-	public static @JsonAutowired(filepath = "../jmart/json/Account.json", value = Account.class) JsonTable<Account> accountTable;
-	
-	@Override
-	public JsonTable<Account> getJsonTable() {
-		return accountTable;
-	}
-	
+
+	/**
+	 * Method untuk mendapatkan account table
+	 */
+	public JsonTable<Account> getJsonTable(){
+        return accountTable;
+    }
+
+	/**
+	 * Method mapping untuk user agar bisa login
+	 * @param email		user email
+	 * @param password	user password
+	 * @return account
+	 */
 	@PostMapping("/login")
-	Account login
-	(
-		@RequestParam String email,
-		@RequestParam String password
+	Account login(
+			@RequestParam String email,
+			@RequestParam String password
 	)
 	{
-		try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] messageDigest = md.digest(password.getBytes());
-            BigInteger no = new BigInteger(1, messageDigest);
-            String hashPassword = no.toString(16);
-            while (hashPassword.length() < 32) {
-                hashPassword = "0" + hashPassword;
+		for(Account account : accountTable) {
+			try{
+                MessageDigest md = MessageDigest.getInstance("MD5");
+                md.update(password.getBytes());
+                byte[] bytes = md.digest();
+                StringBuilder sb = new StringBuilder();
+                for(int i = 0; i < bytes.length; i++){
+                    sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+                }
+                if(account.email.equals(email) && account.password.equals(sb.toString())){ //Compare hash in string with equals
+                    return account;
+                }
+            } catch (NoSuchAlgorithmException e){
+                e.printStackTrace();
             }
-            String hashed = hashPassword;
-            return Algorithm.<Account>find(accountTable, obj -> obj.email.equals(email) && obj.password.equals(hashed));
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+		}
 		return null;
 	}
-	
+
+	/**
+	 * Method mapping agar user dapat register ke program jmart
+	 * @param name		nama user
+	 * @param email		email user
+	 * @param password	password user
+	 * @return	newAccount
+	 */
 	@PostMapping("/register")
 	Account register
 	(
-		@RequestParam String name,
-		@RequestParam String email,
-		@RequestParam String password
+		  @RequestParam String name,
+		  @RequestParam String email,
+		  @RequestParam String password
 	)
 	{
-		 if(name.isBlank()) return null;
-		 
-		 Matcher matcher1 = REGEX_PATTERN_EMAIL.matcher(email);
-		 if(!matcher1.find()) return null;
-		 
-		 Matcher matcher2 = REGEX_PATTERN_PASSWORD.matcher(password);
-		 if(!matcher2.find()) return null;
-		 
-		 if(Algorithm.<Account>find(accountTable, obj -> obj.email.equals(email)) != null) return null;
-		 
-		 MessageDigest md = null;
-		 try {
-			 md = MessageDigest.getInstance("MD5");
-		 } catch (NoSuchAlgorithmException e) {
-			 e.printStackTrace();
-		 }
-		 
-		 byte[] digest = md.digest(password.getBytes());
-		 BigInteger no = new BigInteger(1, digest);
-		 String hashed = no.toString(16);
-		 while (hashed.length() < 32) {
-			 hashed = "0" + hashed;
-		 }
-		 
-		 Account account = new Account(name, email, hashed, 0);
-		 accountTable.add(account);
-		 
-		 return account;
+		  String generatedPassword;
+		  try {
+		   MessageDigest md = MessageDigest.getInstance("MD5");
+		     
+		            byte[] bytes = md.digest(password.getBytes());
+	
+		            StringBuilder sb = new StringBuilder();
+		            for(int i = 0; i < bytes.length; i++)
+		             sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+		            
+		            generatedPassword = sb.toString();
+		  }
+		  catch(NoSuchAlgorithmException e) {
+			  		throw new RuntimeException(e);
+		  }
+		  if(!name.isBlank() && REGEX_PATTERN_EMAIL.matcher(email).find() &&
+		    REGEX_PATTERN_PASSWORD.matcher(password).find() &&
+		    !Algorithm.<Account>exists(getJsonTable(), (account -> account.email.equals(email)))) {
+				   getJsonTable().add(new Account(name, email, generatedPassword, 0));
+				   return new Account(name, email, generatedPassword, 0);
+		  }
+		   
+		  return null;
 	}
-	
-	@PostMapping("/{id}/registerStore")
-	Store registerStore
-	(
-		@RequestParam int id,
-		@RequestParam String name,
-		@RequestParam String address,
-		@RequestParam String phoneNumber
-	)
-	{
-		 if(accountTable.contains(accountTable.get(id)) && accountTable.get(id).store == null){
-			 Store newStore = new Store(name, address, phoneNumber, 0);
-			 accountTable.get(id).store = newStore;
-			 return newStore;
-		 }
-		 else{
-			 return null;
-		 }
-	}
-	
-	@PostMapping("/{id}/topUp")
-	boolean topUp
-	(
-		@RequestParam int id,
-		@RequestParam double balance
-	)
-	{
-		if(accountTable.contains(accountTable.get(id))){
-			accountTable.get(id).balance += balance;
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-	
-	
+
+    /**
+     * Method controller untuk user dapat membuat store baru
+     * @param id			id user
+     * @param name			nama user
+     * @param address		alamat user
+     * @param phoneNumber	nomor telepon user
+     * @return newStore
+     */
+    @PostMapping("/{id}/registerStore")
+    Store registerStore(@PathVariable int id, @RequestParam String name, @RequestParam String address, @RequestParam String phoneNumber){
+        if(accountTable.contains(accountTable.get(id)) && accountTable.get(id).store == null){
+            Store newStore = new Store(name, address, phoneNumber, 0);
+            accountTable.get(id).store = newStore;
+            return newStore;
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * Method controller agar user dapat topUp ke Jmart
+     * @param id		id user
+     * @param balance	balance user
+     * @return
+     */
+    @PostMapping("/{id}/topUp")
+    Account topUp(@PathVariable int id, @RequestParam double balance){
+        if(accountTable.contains(accountTable.get(id))){
+            accountTable.get(id).balance += balance;
+            return accountTable.get(id);
+        }else{
+            return null;
+        }
+
+    }
+
+	/**
+	 * Method untuk mendapatkan account page untuk melihat server sudah aktif atau belum
+	 * @return accountPage
+	 */
 	@GetMapping
 	String index() { return "account page"; }
-	
-	
-	//@GetMapping("/{id}")
-	//String getById(@PathVariable int id) { return "account id " + id + " not found!"; }
 }
