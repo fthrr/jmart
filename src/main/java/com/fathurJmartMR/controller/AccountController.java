@@ -115,7 +115,7 @@ public class AccountController implements BasicGetController<Account>
      * @param phoneNumber	nomor telepon user
      * @return newStore
      */
-    @PostMapping("/{id}/registerStore")
+	@PostMapping("/{id}/registerStore")
     Store registerStore(@PathVariable int id, @RequestParam String name, @RequestParam String address, @RequestParam String phoneNumber){
         if(accountTable.contains(accountTable.get(id)) && accountTable.get(id).store == null){
             Store newStore = new Store(name, address, phoneNumber, 0);
@@ -132,7 +132,7 @@ public class AccountController implements BasicGetController<Account>
      * @param balance	balance user
      * @return
      */
-    @PostMapping("/{id}/topUp")
+	@PostMapping("/{id}/topUp")
     Account topUp(@PathVariable int id, @RequestParam double balance){
         if(accountTable.contains(accountTable.get(id))){
             accountTable.get(id).balance += balance;
