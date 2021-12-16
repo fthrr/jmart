@@ -28,8 +28,14 @@ public abstract class Invoice extends Serializable
      *
      */
     public enum Status{
-        WAITING_CONFIRMATION, CANCELLED, ON_PROGRESS, ON_DELIVERY,
-        COMPLAINT, FINISHED, FAILED, DELIVERED
+        WAITING_CONFIRMATION,
+        CANCELLED,
+        ON_PROGRESS,
+        ON_DELIVERY,
+        COMPLAINT,
+        FINISHED,
+        FAILED,
+        DELIVERED
     }
     
     /**
@@ -37,7 +43,10 @@ public abstract class Invoice extends Serializable
      *
      */
     public enum Rating{
-        NONE, BAD, NEUTRAL, GOOD
+        NONE,
+        BAD,
+        NEUTRAL,
+        GOOD
     }
     
     

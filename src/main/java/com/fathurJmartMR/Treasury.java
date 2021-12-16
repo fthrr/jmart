@@ -58,9 +58,9 @@ public class Treasury
             adminFee = BOTTOM_FEE;
         }
         else{
-            adminFee = getDiscountedPrice(price, discount) -
-                    (getDiscountedPrice(price, discount) * COMMISSION_MULTIPLIER);
+            adminFee = getDiscountedPrice(price, discount) * COMMISSION_MULTIPLIER;
         }
+        
         return adminFee;
     }
 

@@ -55,6 +55,15 @@ public class Account extends Serializable
     }
     
     /**
+     * Method untuk menyamakan id yang diinputkan dengan account id tertentu
+     * @param acc objek account
+     * @return condition
+     */
+    public boolean idEquals(Account acc) {
+        return (this.id == acc.id);
+    }
+    
+    /**
      * Method untuk mengubah seluruh variable menjadi string
      * 
      * @return string of all variable

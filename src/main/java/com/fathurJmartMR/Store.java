@@ -50,17 +50,13 @@ public class Store extends Serializable
      * @return condition
      */
     public boolean validate(){
-        Pattern REGEX_NAME = Pattern.compile(Store.REGEX_NAME);
-        Matcher NamePattern = REGEX_NAME.matcher(this.name);
-        boolean namePattern = NamePattern.find();
-        Pattern REGEX_PHONE = Pattern.compile(Store.REGEX_PHONE);
-        Matcher NumberPattern = REGEX_PHONE.matcher(this.name);
-        boolean numberPattern = NumberPattern.find();
-        
-        if(namePattern == true && numberPattern == true){
+    	Pattern pPhone = Pattern.compile(REGEX_PHONE);
+        Pattern pName = Pattern.compile(REGEX_NAME);
+        Matcher mPhone = pPhone.matcher(phoneNumber);
+        Matcher mName = pName.matcher(name);
+        if(mPhone.find() && mName.find()){
             return true;
-        }
-        else{
+        }else{
             return false;
         }
     }

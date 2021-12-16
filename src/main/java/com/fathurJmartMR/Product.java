@@ -52,8 +52,13 @@ public class Product extends Serializable
      */
     @Override
     public String toString(){
-        return("Name: " + name + "\nWeight: " + weight + "\nconditionUsed: " + conditionUsed + 
-               "\nprice: " + price + "\ncategory: " + category + "\ndiscount: " + discount + "\naccountId: " + accountId);
+        return("Name: " + name + 
+        		"\nWeight: " + weight +
+        		"\nconditionUsed: " + conditionUsed +
+               "\nprice: " + price +
+               "\ncategory: " + category +
+               "\ndiscount: " + discount +
+               "\naccountId: " + accountId);
     }
 
 }

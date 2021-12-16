@@ -19,7 +19,7 @@ public class Coupon extends Serializable
     }
     
     /**
-     * Instace variable untuk class coupon
+     * Instance variable untuk class coupon
      */
     public final int code;
     public final double cut;
@@ -30,7 +30,7 @@ public class Coupon extends Serializable
     
 
     /**
-     * Method construtor untuk class coupon
+     * Method constructor untuk class coupon
      * @param name	coupon name
      * @param code	coupon code
      * @param type	coupon type

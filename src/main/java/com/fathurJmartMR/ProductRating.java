@@ -5,7 +5,7 @@ package com.fathurJmartMR;
  * Product Rating Class untuk menghandle rincian product
  *
  * @author Fathurrahman Irwansa
- * @version 5 Desmber 2021
+ * @version 5 Desember 2021
  */
 public class ProductRating
 {

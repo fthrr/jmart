@@ -1,11 +1,17 @@
 package com.fathurJmartMR.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.fathurJmartMR.Account;
+import com.fathurJmartMR.Algorithm;
 import com.fathurJmartMR.Invoice;
 import com.fathurJmartMR.ObjectPoolThread;
 import com.fathurJmartMR.Payment;
@@ -33,7 +39,41 @@ public class PaymentController implements BasicGetController<Payment>
 	public static @JsonAutowired(value = Payment.class, filepath = "C:\\OOP\\jmart\\json\\Payment.json") JsonTable<Payment> paymentTable;
 	public static ObjectPoolThread<Payment> poolThread = new ObjectPoolThread<Payment>("Thread", PaymentController::timekeeper);
 
-
+	/**
+	 * Method untuk mendapatkan invoice dari product milik seller
+	 * @param id		product Id
+	 * @param page		page number
+	 * @param pageSize	ukuran page
+	 * @return pageInvoice
+	 */
+	@GetMapping("/{id}/page")
+    @ResponseBody List<Payment> getInvoices(@PathVariable int id, @RequestParam(defaultValue="0") int page, @RequestParam(defaultValue="1000") int pageSize){
+        List<Payment> paymentList = new ArrayList<>();
+        Account accountTarget = Algorithm.<Account>find(AccountController.accountTable,  a -> a.id == id);
+        if(accountTarget != null){
+            for(Payment payment : paymentTable){
+                for(Product product : ProductController.productTable){
+                    if(payment.productId == product.id && product.accountId == accountTarget.id){
+                        paymentList.add(payment);
+                    }
+                }
+            }
+        }
+        return Algorithm.paginate(paymentList, page, pageSize, e->true);
+    }
+	
+	/**
+	 * Method untuk mendapatkan invoice dari pembelian penjual
+	 * @param id		account id
+	 * @param page		page number
+	 * @param pageSize	ukuran page
+	 * @return
+	 */
+    @GetMapping("/{id}/purchases/page")
+    @ResponseBody List<Payment> getMyInvoices(@PathVariable int id, @RequestParam(defaultValue="0") int page, @RequestParam(defaultValue="1000") int pageSize){
+        return Algorithm.<Payment>paginate(getJsonTable(), page, pageSize, p -> p.buyerId == id);
+    }
+	
     /**
      * Method untuk menerima pembayaran
      * @param id	payment id
