@@ -37,6 +37,33 @@ public class Store extends Serializable
     }
     
     /**
+     * Constructor method untuk class store
+     * @param accountId		account id
+     * @param name			nama store
+     * @param address		alamat store
+     * @param phoneNumber	phone number store
+     */
+    public Store(int accountId, String name, String address, String phoneNumber) {
+    	this.name = name;
+    	this.address = address;
+    	this.phoneNumber = phoneNumber;
+      
+    }
+  
+    /**
+     * Constructor method untuk class store
+     * @param account		account object
+     * @param name			nama store
+     * @param address		alamat store
+     * @param phoneNumber	phone number store
+     */
+    public Store(Account account, String name, String address, String phoneNumber) {
+    	this.name = name;
+	    this.address = address;
+	    this.phoneNumber = phoneNumber; 
+    }
+    
+    /**
      *Method untuk mengkonversi variable dalam kelas Store menjadi string
      */
     public String toString() {
