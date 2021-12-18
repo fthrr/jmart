@@ -169,6 +169,42 @@ public class PaymentController implements BasicGetController<Payment>
         }
         return false;
     }
+    
+    /**
+     * Method untuk menyelesaikan pembayaran
+     * @param id		payment id
+     * @return condition
+     */
+    @PostMapping("/{id}/done")
+    boolean submit(@PathVariable int id) {
+        for(Payment payment : paymentTable){
+            if(payment.id == id){
+                if(payment.history.get(payment.history.size() - 1).status == Invoice.Status.ON_DELIVERY){
+                	payment.history.add(new Payment.Record(Invoice.Status.DELIVERED, "DELIVERED"));
+                	return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Method untuk menyelesaikan pembayaran
+     * @param id		payment id
+     * @return condition
+     */
+    @PostMapping("/{id}/finish")
+    boolean finish(@PathVariable int id) {
+        for(Payment payment : paymentTable){
+            if(payment.id == id){
+                if(payment.history.get(payment.history.size() - 1).status == Invoice.Status.DELIVERED){
+                	payment.history.add(new Payment.Record(Invoice.Status.FINISHED, "FINISHED"));
+                	return true;
+                }
+            }
+        }
+        return false;
+    }
 
     /**
      * Method untuk membatasi waktu pembayaran
